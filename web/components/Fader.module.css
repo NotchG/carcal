@@ -1,0 +1,77 @@
+.fader { display: grid; justify-items: center; gap: 10px; user-select: none; }
+.readout {
+  font-size: var(--t-2xl);
+  font-weight: 600;
+  line-height: 1;
+  color: var(--fog);
+  min-width: 3.6ch;
+  text-align: center;
+}
+.readout span { font-size: var(--t-sm); font-weight: 500; color: var(--fog-dim); }
+
+.slot {
+  position: relative;
+  width: 64px;
+  height: 220px;
+  cursor: ns-resize;
+  touch-action: none;
+  border-radius: var(--radius-s);
+}
+.slot:focus-visible { outline-offset: 6px; }
+
+.track {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 6px;
+  transform: translateX(-50%);
+  background: var(--cabin);
+  border: 1px solid var(--line-strong);
+  border-radius: 3px;
+}
+.fill {
+  position: absolute;
+  left: 50%;
+  width: 4px;
+  transform: translateX(-50%);
+  background: var(--amber);
+  border-radius: 2px;
+}
+.tick {
+  position: absolute;
+  left: 4px;
+  width: 10px;
+  height: 0;
+  border-top: 1px solid var(--line-strong);
+  transform: translateY(0.5px);
+}
+.tickMajor { width: 14px; left: 0; border-top-color: var(--fog-faint); }
+.tick em {
+  position: absolute;
+  right: calc(100% + 6px);
+  top: -0.65em;
+  font: 500 11px var(--font-head);
+  font-style: normal;
+  color: var(--fog-faint);
+  white-space: nowrap;
+}
+
+/* mixer-style fader cap: a ridged block, not a round knob */
+.cap {
+  position: absolute;
+  left: 50%;
+  width: 46px;
+  height: 26px;
+  transform: translate(-50%, 50%);
+  border-radius: 3px;
+  background:
+    linear-gradient(var(--amber), var(--amber)) center / 100% 2px no-repeat,
+    repeating-linear-gradient(to bottom, #3c4a5e 0 2px, #33404f 2px 4px);
+  border: 1px solid var(--line-strong);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.35);
+}
+.slot:active .cap, .slot:focus-visible .cap { border-color: var(--amber); }
+
+.label { font: 600 var(--t-lg) / 1 var(--font-head); }
+.hint { font-size: var(--t-xs); color: var(--fog-faint); margin-top: -6px; white-space: nowrap; }

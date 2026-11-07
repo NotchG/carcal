@@ -1,0 +1,15 @@
+Filter Settings file
+
+Room EQ V5.40
+Dated: Oct 21, 2026 10:00:00 AM
+
+Notes:FL test
+
+Equaliser: Generic
+FL RTA avg 3 pos
+Filter  1: ON  PK       Fc   125.0 Hz  Gain  -5.00 dB  Q  2.500
+Filter  2: ON  PK       Fc   315.0 Hz  Gain  -3.50 dB  Q  3.000
+Filter  3: ON  PK       Fc   2500 Hz   Gain   2.00 dB  Q  1.500
+Filter  4: ON  HSC      Fc   8000 Hz   Gain  -2.00 dB  Q  0.707
+Filter  5: OFF None
+Filter  6: ON  PK       Fc   1.25 kHz  Gain  -1.50 dB  BW Oct 0.333

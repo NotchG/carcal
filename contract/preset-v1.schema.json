@@ -1,0 +1,1055 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "carcal preset contract v1",
+  "description": "Messages between the carcal dashboard and a DSP bridge. Generated from carcal/bridge/contract.py - do not edit by hand.",
+  "definitions": {
+    "DeviceDescription": {
+      "$defs": {
+        "BaselineInfo": {
+          "additionalProperties": false,
+          "properties": {
+            "source": {
+              "enum": [
+                "captured",
+                "uploaded",
+                "factory default"
+              ],
+              "title": "Source",
+              "type": "string"
+            },
+            "at": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "At"
+            }
+          },
+          "required": [
+            "source"
+          ],
+          "title": "BaselineInfo",
+          "type": "object"
+        },
+        "BridgeStatus": {
+          "additionalProperties": false,
+          "properties": {
+            "automation": {
+              "description": "The bridge can load presets into the DSP itself",
+              "title": "Automation",
+              "type": "boolean"
+            },
+            "app_found": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "App Found"
+            },
+            "amp_connected": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Amp Connected"
+            },
+            "message": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Message"
+            }
+          },
+          "required": [
+            "automation"
+          ],
+          "title": "BridgeStatus",
+          "type": "object"
+        },
+        "Capabilities": {
+          "additionalProperties": false,
+          "properties": {
+            "eq": {
+              "$ref": "#/$defs/EqCapability"
+            },
+            "crossover_slopes_db_oct": {
+              "default": [],
+              "items": {
+                "type": "integer"
+              },
+              "title": "Crossover Slopes Db Oct",
+              "type": "array"
+            },
+            "crossover_types": {
+              "default": [],
+              "items": {
+                "type": "string"
+              },
+              "title": "Crossover Types",
+              "type": "array"
+            },
+            "delay": {
+              "$ref": "#/$defs/SettingCapability"
+            },
+            "gain": {
+              "$ref": "#/$defs/SettingCapability"
+            },
+            "polarity": {
+              "$ref": "#/$defs/SettingCapability"
+            },
+            "mute": {
+              "$ref": "#/$defs/SettingCapability"
+            }
+          },
+          "required": [
+            "eq",
+            "delay",
+            "gain",
+            "polarity",
+            "mute"
+          ],
+          "title": "Capabilities",
+          "type": "object"
+        },
+        "ChannelInfo": {
+          "additionalProperties": false,
+          "properties": {
+            "key": {
+              "description": "Logical channel, e.g. FL, FR, RL, RR, SUB",
+              "title": "Key",
+              "type": "string"
+            },
+            "label": {
+              "title": "Label",
+              "type": "string"
+            },
+            "role": {
+              "default": "other",
+              "enum": [
+                "front",
+                "rear",
+                "sub",
+                "center",
+                "other"
+              ],
+              "title": "Role",
+              "type": "string"
+            },
+            "pair": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Left/right partner, for level matching",
+              "title": "Pair"
+            },
+            "default_highpass": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/Crossover"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null
+            },
+            "default_lowpass": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/Crossover"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null
+            },
+            "default_level_offset_db": {
+              "default": 0.0,
+              "title": "Default Level Offset Db",
+              "type": "number"
+            }
+          },
+          "required": [
+            "key",
+            "label"
+          ],
+          "title": "ChannelInfo",
+          "type": "object"
+        },
+        "Crossover": {
+          "additionalProperties": false,
+          "properties": {
+            "hz": {
+              "maximum": 24000,
+              "minimum": 10,
+              "title": "Hz",
+              "type": "number"
+            },
+            "slope_db_oct": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "e.g. 12, 24; null = device default",
+              "title": "Slope Db Oct"
+            },
+            "type": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "e.g. 'butterworth', 'linkwitz-riley'",
+              "title": "Type"
+            }
+          },
+          "required": [
+            "hz"
+          ],
+          "title": "Crossover",
+          "type": "object"
+        },
+        "DeviceIdentity": {
+          "additionalProperties": false,
+          "properties": {
+            "id": {
+              "title": "Id",
+              "type": "string"
+            },
+            "maker": {
+              "title": "Maker",
+              "type": "string"
+            },
+            "name": {
+              "title": "Name",
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "maker",
+            "name"
+          ],
+          "title": "DeviceIdentity",
+          "type": "object"
+        },
+        "EqCapability": {
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "description": "fixed: bands at set frequencies with one Q, only gain adjustable. parametric: free frequency/gain/Q per filter",
+              "enum": [
+                "fixed",
+                "parametric"
+              ],
+              "title": "Kind",
+              "type": "string"
+            },
+            "bands_hz": {
+              "anyOf": [
+                {
+                  "items": {
+                    "type": "number"
+                  },
+                  "type": "array"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Band centres for kind=fixed",
+              "title": "Bands Hz"
+            },
+            "q": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "The single Q of every band, kind=fixed",
+              "title": "Q"
+            },
+            "q_range": {
+              "anyOf": [
+                {
+                  "maxItems": 2,
+                  "minItems": 2,
+                  "prefixItems": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "number"
+                    }
+                  ],
+                  "type": "array"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "kind=parametric",
+              "title": "Q Range"
+            },
+            "max_filters": {
+              "title": "Max Filters",
+              "type": "integer"
+            },
+            "gain_db": {
+              "description": "Allowed gain per band/filter",
+              "maxItems": 2,
+              "minItems": 2,
+              "prefixItems": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "number"
+                }
+              ],
+              "title": "Gain Db",
+              "type": "array"
+            },
+            "gain_step_db": {
+              "default": 0.1,
+              "title": "Gain Step Db",
+              "type": "number"
+            },
+            "filter_types": {
+              "default": [
+                "PK"
+              ],
+              "items": {
+                "type": "string"
+              },
+              "title": "Filter Types",
+              "type": "array"
+            },
+            "fs_hz": {
+              "default": 48000,
+              "title": "Fs Hz",
+              "type": "number"
+            }
+          },
+          "required": [
+            "kind",
+            "max_filters",
+            "gain_db"
+          ],
+          "title": "EqCapability",
+          "type": "object"
+        },
+        "SettingCapability": {
+          "additionalProperties": false,
+          "properties": {
+            "supported": {
+              "default": true,
+              "title": "Supported",
+              "type": "boolean"
+            },
+            "writable": {
+              "description": "False: the bridge reports it but won't write it yet",
+              "title": "Writable",
+              "type": "boolean"
+            },
+            "note": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Note"
+            }
+          },
+          "required": [
+            "writable"
+          ],
+          "title": "SettingCapability",
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "properties": {
+        "contract": {
+          "default": "carcal.preset/1",
+          "title": "Contract",
+          "type": "string"
+        },
+        "bridge_version": {
+          "title": "Bridge Version",
+          "type": "string"
+        },
+        "mode": {
+          "enum": [
+            "real",
+            "sim"
+          ],
+          "title": "Mode",
+          "type": "string"
+        },
+        "device": {
+          "$ref": "#/$defs/DeviceIdentity"
+        },
+        "status": {
+          "$ref": "#/$defs/BridgeStatus"
+        },
+        "channels": {
+          "items": {
+            "$ref": "#/$defs/ChannelInfo"
+          },
+          "title": "Channels",
+          "type": "array"
+        },
+        "capabilities": {
+          "$ref": "#/$defs/Capabilities"
+        },
+        "baseline": {
+          "$ref": "#/$defs/BaselineInfo"
+        }
+      },
+      "required": [
+        "bridge_version",
+        "mode",
+        "device",
+        "status",
+        "channels",
+        "capabilities",
+        "baseline"
+      ],
+      "title": "DeviceDescription",
+      "type": "object"
+    },
+    "PresetRequest": {
+      "$defs": {
+        "ChannelSettings": {
+          "additionalProperties": false,
+          "properties": {
+            "mute": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Mute"
+            },
+            "gain_db": {
+              "anyOf": [
+                {
+                  "maximum": 12,
+                  "minimum": -60,
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Gain Db"
+            },
+            "delay_ms": {
+              "anyOf": [
+                {
+                  "maximum": 50,
+                  "minimum": 0,
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Delay Ms"
+            },
+            "polarity": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "normal",
+                    "inverted"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Polarity"
+            },
+            "highpass": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/Crossover"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null
+            },
+            "lowpass": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/Crossover"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null
+            },
+            "eq": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/Eq"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null
+            }
+          },
+          "title": "ChannelSettings",
+          "type": "object"
+        },
+        "Crossover": {
+          "additionalProperties": false,
+          "properties": {
+            "hz": {
+              "maximum": 24000,
+              "minimum": 10,
+              "title": "Hz",
+              "type": "number"
+            },
+            "slope_db_oct": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "e.g. 12, 24; null = device default",
+              "title": "Slope Db Oct"
+            },
+            "type": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "e.g. 'butterworth', 'linkwitz-riley'",
+              "title": "Type"
+            }
+          },
+          "required": [
+            "hz"
+          ],
+          "title": "Crossover",
+          "type": "object"
+        },
+        "Eq": {
+          "additionalProperties": false,
+          "description": "Replace the channel's EQ. Give either filters (JSON) or rew_txt (REW's\n'Export filter settings as text'). An empty filter list means flat.",
+          "properties": {
+            "filters": {
+              "anyOf": [
+                {
+                  "items": {
+                    "$ref": "#/$defs/Filter"
+                  },
+                  "type": "array"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Filters"
+            },
+            "rew_txt": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Rew Txt"
+            }
+          },
+          "title": "Eq",
+          "type": "object"
+        },
+        "Filter": {
+          "additionalProperties": false,
+          "properties": {
+            "type": {
+              "default": "PK",
+              "enum": [
+                "PK",
+                "LS",
+                "HS",
+                "LSC",
+                "HSC"
+              ],
+              "title": "Type",
+              "type": "string"
+            },
+            "fc_hz": {
+              "exclusiveMinimum": 0,
+              "maximum": 24000,
+              "title": "Fc Hz",
+              "type": "number"
+            },
+            "gain_db": {
+              "maximum": 30,
+              "minimum": -30,
+              "title": "Gain Db",
+              "type": "number"
+            },
+            "q": {
+              "anyOf": [
+                {
+                  "exclusiveMinimum": 0,
+                  "maximum": 50,
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Q"
+            }
+          },
+          "required": [
+            "fc_hz",
+            "gain_db"
+          ],
+          "title": "Filter",
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "properties": {
+        "contract": {
+          "const": "carcal.preset/1",
+          "default": "carcal.preset/1",
+          "title": "Contract",
+          "type": "string"
+        },
+        "name": {
+          "default": "carcal preset",
+          "maxLength": 120,
+          "title": "Name",
+          "type": "string"
+        },
+        "purpose": {
+          "default": "tune",
+          "description": "'tune' presets become the 'last applied' one to restore",
+          "enum": [
+            "tune",
+            "measure",
+            "test"
+          ],
+          "title": "Purpose",
+          "type": "string"
+        },
+        "channels": {
+          "additionalProperties": {
+            "$ref": "#/$defs/ChannelSettings"
+          },
+          "title": "Channels",
+          "type": "object"
+        }
+      },
+      "required": [
+        "channels"
+      ],
+      "title": "PresetRequest",
+      "type": "object"
+    },
+    "CompileResult": {
+      "$defs": {
+        "ChannelCompile": {
+          "additionalProperties": false,
+          "properties": {
+            "eq_response_db": {
+              "description": "Realised EQ on the shared grid",
+              "items": {
+                "type": "number"
+              },
+              "title": "Eq Response Db",
+              "type": "array"
+            },
+            "eq_exact": {
+              "description": "True when the filters mapped 1:1 onto the device",
+              "title": "Eq Exact",
+              "type": "boolean"
+            },
+            "fit_rms_db": {
+              "description": "Realised vs requested EQ, both smoothed like hearing (1/6 oct below 300 Hz, 1/3 above), over the filters' range",
+              "title": "Fit Rms Db",
+              "type": "number"
+            },
+            "fit_max_db": {
+              "title": "Fit Max Db",
+              "type": "number"
+            },
+            "warnings": {
+              "default": [],
+              "items": {
+                "type": "string"
+              },
+              "title": "Warnings",
+              "type": "array"
+            }
+          },
+          "required": [
+            "eq_response_db",
+            "eq_exact",
+            "fit_rms_db",
+            "fit_max_db"
+          ],
+          "title": "ChannelCompile",
+          "type": "object"
+        },
+        "FileRef": {
+          "additionalProperties": false,
+          "properties": {
+            "id": {
+              "title": "Id",
+              "type": "string"
+            },
+            "name": {
+              "title": "Name",
+              "type": "string"
+            },
+            "url": {
+              "title": "Url",
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "name",
+            "url"
+          ],
+          "title": "FileRef",
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "properties": {
+        "contract": {
+          "default": "carcal.preset/1",
+          "title": "Contract",
+          "type": "string"
+        },
+        "preset_id": {
+          "title": "Preset Id",
+          "type": "string"
+        },
+        "freqs": {
+          "items": {
+            "type": "number"
+          },
+          "title": "Freqs",
+          "type": "array"
+        },
+        "channels": {
+          "additionalProperties": {
+            "$ref": "#/$defs/ChannelCompile"
+          },
+          "title": "Channels",
+          "type": "object"
+        },
+        "ignored": {
+          "default": [],
+          "description": "Requested settings the bridge didn't write, with why",
+          "items": {
+            "type": "string"
+          },
+          "title": "Ignored",
+          "type": "array"
+        },
+        "warnings": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Warnings",
+          "type": "array"
+        },
+        "file": {
+          "$ref": "#/$defs/FileRef"
+        }
+      },
+      "required": [
+        "preset_id",
+        "freqs",
+        "channels",
+        "file"
+      ],
+      "title": "CompileResult",
+      "type": "object"
+    },
+    "ApplyResult": {
+      "$defs": {
+        "ChannelCompile": {
+          "additionalProperties": false,
+          "properties": {
+            "eq_response_db": {
+              "description": "Realised EQ on the shared grid",
+              "items": {
+                "type": "number"
+              },
+              "title": "Eq Response Db",
+              "type": "array"
+            },
+            "eq_exact": {
+              "description": "True when the filters mapped 1:1 onto the device",
+              "title": "Eq Exact",
+              "type": "boolean"
+            },
+            "fit_rms_db": {
+              "description": "Realised vs requested EQ, both smoothed like hearing (1/6 oct below 300 Hz, 1/3 above), over the filters' range",
+              "title": "Fit Rms Db",
+              "type": "number"
+            },
+            "fit_max_db": {
+              "title": "Fit Max Db",
+              "type": "number"
+            },
+            "warnings": {
+              "default": [],
+              "items": {
+                "type": "string"
+              },
+              "title": "Warnings",
+              "type": "array"
+            }
+          },
+          "required": [
+            "eq_response_db",
+            "eq_exact",
+            "fit_rms_db",
+            "fit_max_db"
+          ],
+          "title": "ChannelCompile",
+          "type": "object"
+        },
+        "FileRef": {
+          "additionalProperties": false,
+          "properties": {
+            "id": {
+              "title": "Id",
+              "type": "string"
+            },
+            "name": {
+              "title": "Name",
+              "type": "string"
+            },
+            "url": {
+              "title": "Url",
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "name",
+            "url"
+          ],
+          "title": "FileRef",
+          "type": "object"
+        }
+      },
+      "additionalProperties": false,
+      "properties": {
+        "contract": {
+          "default": "carcal.preset/1",
+          "title": "Contract",
+          "type": "string"
+        },
+        "preset_id": {
+          "title": "Preset Id",
+          "type": "string"
+        },
+        "freqs": {
+          "items": {
+            "type": "number"
+          },
+          "title": "Freqs",
+          "type": "array"
+        },
+        "channels": {
+          "additionalProperties": {
+            "$ref": "#/$defs/ChannelCompile"
+          },
+          "title": "Channels",
+          "type": "object"
+        },
+        "ignored": {
+          "default": [],
+          "description": "Requested settings the bridge didn't write, with why",
+          "items": {
+            "type": "string"
+          },
+          "title": "Ignored",
+          "type": "array"
+        },
+        "warnings": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Warnings",
+          "type": "array"
+        },
+        "file": {
+          "$ref": "#/$defs/FileRef"
+        },
+        "applied": {
+          "title": "Applied",
+          "type": "boolean"
+        },
+        "manual": {
+          "description": "True: automation unavailable, import file.url yourself",
+          "title": "Manual",
+          "type": "boolean"
+        },
+        "verified": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Verified"
+        },
+        "mismatches": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Mismatches",
+          "type": "array"
+        },
+        "backup_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Backup Id"
+        },
+        "message": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Message"
+        }
+      },
+      "required": [
+        "preset_id",
+        "freqs",
+        "channels",
+        "file",
+        "applied",
+        "manual"
+      ],
+      "title": "ApplyResult",
+      "type": "object"
+    },
+    "RestoreRequest": {
+      "additionalProperties": false,
+      "properties": {
+        "to": {
+          "default": "last-tune",
+          "enum": [
+            "last-tune",
+            "baseline"
+          ],
+          "title": "To",
+          "type": "string"
+        }
+      },
+      "title": "RestoreRequest",
+      "type": "object"
+    }
+  }
+}

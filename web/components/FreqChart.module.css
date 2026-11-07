@@ -1,0 +1,31 @@
+.wrap { width: 100%; min-width: 0; overflow: hidden; }
+.svg { display: block; touch-action: none; }
+.grid { stroke: var(--line); stroke-width: 1; }
+.gridMinor { stroke: var(--line); stroke-width: 1; opacity: 0.35; }
+.zero { stroke: var(--fog-faint); stroke-width: 1; }
+.band { fill: rgba(127, 196, 214, 0.05); }
+.tick { fill: var(--fog-faint); font: 500 11px var(--font-head); }
+.cursor { stroke: var(--fog-dim); stroke-width: 1; stroke-dasharray: 3 3; }
+
+.trace { fill: none; stroke-linejoin: round; stroke-linecap: round; }
+.target { stroke: var(--amber); stroke-width: 2.6; }
+.predicted { stroke: var(--cyan); stroke-width: 2; }
+.measured { stroke: var(--fog-faint); stroke-width: 1.3; }
+.noise { stroke: var(--fog-faint); stroke-width: 1; stroke-dasharray: 4 4; opacity: 0.7; }
+.eq { stroke: var(--cyan); stroke-width: 1.8; }
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+  padding: 8px 0 0 44px;
+  font-size: var(--t-sm);
+  color: var(--fog-dim);
+  min-height: 30px;
+}
+.key { display: inline-flex; align-items: center; gap: 7px; }
+.swatch { display: inline-block; width: 18px; height: 0; border-top: 2.5px solid; }
+.swatch.target { border-color: var(--amber); }
+.swatch.predicted, .swatch.eq { border-color: var(--cyan); }
+.swatch.measured { border-color: var(--fog-faint); border-top-width: 1.5px; }
+.swatch.noise { border-color: var(--fog-faint); border-top-style: dashed; border-top-width: 1.5px; }

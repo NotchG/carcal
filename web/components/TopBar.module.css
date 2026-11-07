@@ -1,0 +1,28 @@
+.bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px var(--gutter);
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+}
+.mark {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font: 700 var(--t-lg) / 1 var(--font-head);
+  color: var(--fog);
+  text-decoration: none;
+  letter-spacing: 0.02em;
+}
+.status { display: flex; gap: 18px; align-items: center; flex-wrap: wrap; font-size: var(--t-sm); color: var(--fog-dim); }
+.item { display: inline-flex; align-items: center; gap: 7px; }
+.sim {
+  font-size: var(--t-xs);
+  color: var(--cyan);
+  border: 1px solid var(--cyan-dim);
+  border-radius: 99px;
+  padding: 2px 10px;
+}

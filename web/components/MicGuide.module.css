@@ -1,0 +1,111 @@
+.guide {
+  display: grid;
+  grid-template-columns: minmax(0, 190px) minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-m);
+  padding: 16px;
+}
+@media (max-width: 560px) {
+  .guide { grid-template-columns: minmax(0, 1fr); }
+  .guide > .fig:first-child { max-width: 220px; }
+}
+
+.fig { margin: 0; display: grid; gap: 10px; min-width: 0; }
+.fig svg { display: block; width: 100%; height: auto; }
+.cap {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 12px;
+  font-size: var(--t-xs);
+  line-height: 1.4;
+  color: var(--fog-dim);
+}
+
+.seg { display: inline-flex; border: 1px solid var(--line-strong); border-radius: var(--radius-s); overflow: hidden; }
+.seg button, .pause {
+  font: 500 var(--t-xs) / 1 var(--font-body);
+  padding: 6px 9px;
+  background: transparent;
+  color: var(--fog-dim);
+  border: 0;
+  cursor: pointer;
+}
+.seg button + button { border-left: 1px solid var(--line-strong); }
+.seg button[aria-pressed="true"] { background: var(--panel-2); color: var(--fog); }
+.pause { border: 1px solid var(--line-strong); border-radius: var(--radius-s); }
+.seg button:hover, .pause:hover { color: var(--fog); }
+
+/* ---- drawing ---- */
+.body { fill: var(--cabin); stroke: var(--line-strong); stroke-width: 1.5; }
+.glass { fill: none; stroke: var(--line-strong); stroke-width: 1.5; }
+.roof { fill: none; stroke: var(--line-strong); stroke-width: 2; }
+.seat { fill: var(--panel-2); stroke: var(--line); stroke-width: 1; }
+.wheel { fill: none; stroke: var(--fog-faint); stroke-width: 2; }
+.person { fill: var(--line-strong); }
+.ghost { fill: none; stroke: var(--fog-faint); stroke-width: 1.2; stroke-dasharray: 3 3; }
+.subBox { fill: var(--panel-2); stroke: var(--line-strong); stroke-width: 1; }
+
+.mapLabel, .mapLabelOn, .tapeLabel, .phase { font-family: var(--font-head); }
+.mapLabel { font-size: 15px; fill: var(--fog-faint); }
+.mapLabelOn { font-size: 15px; font-weight: 600; fill: var(--cyan); }
+.phase { font-size: 14px; fill: var(--fog); }
+.note { font-family: var(--font-body); font-size: 12px; fill: var(--fog-dim); }
+.leader { fill: none; stroke: var(--fog-faint); stroke-width: 1; }
+
+.spk { fill: var(--fog-dim); }
+.spkOn { fill: var(--cyan); }
+.spkMuted { fill: var(--cabin); stroke: var(--line-strong); stroke-width: 1.5; }
+.muteSlash { stroke: var(--fog-faint); stroke-width: 1.5; stroke-linecap: round; }
+
+.ring {
+  fill: none;
+  stroke: var(--cyan);
+  stroke-width: 1.5;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: ring 1.8s ease-out infinite;
+}
+.ring2 { animation-delay: 0.9s; }
+@keyframes ring {
+  from { transform: scale(1); opacity: 0.9; }
+  to { transform: scale(2.8); opacity: 0; }
+}
+/* still picture: one ring, half way out */
+@media (prefers-reduced-motion: reduce) {
+  .ring { transform: scale(1.9); opacity: 0.5; }
+  .ring2 { display: none; }
+}
+
+.orbit { fill: none; stroke: var(--cyan-dim); stroke-width: 1.2; stroke-dasharray: 2 3; }
+.micDot { fill: var(--cyan); stroke: var(--fog); stroke-width: 1.5; }
+
+.tape line { stroke: var(--fog-faint); stroke-width: 1.3; stroke-dasharray: 4 3; }
+.tapeFocus line { stroke: var(--cyan); stroke-width: 2; }
+.tapeLabel {
+  font-size: 13px;
+  fill: var(--fog);
+  paint-order: stroke;
+  stroke: var(--cabin);
+  stroke-width: 4px;
+  stroke-linejoin: round;
+}
+.tapeFocus .tapeLabel { fill: var(--cyan); }
+
+.trail { fill: none; stroke: var(--fog-faint); stroke-width: 1.2; stroke-dasharray: 3 4; }
+.trailArrow { fill: none; stroke: var(--fog-dim); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.earOn { fill: none; stroke: var(--cyan); stroke-width: 2; }
+
+.upArrow { fill: none; stroke: var(--fog-dim); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.capsule { fill: var(--cyan); }
+.micBody { fill: var(--fog); }
+.cable { fill: none; stroke: var(--fog-faint); stroke-width: 1.5; }
+.tapeStrap { fill: var(--fog-faint); opacity: 0.85; }
+
+.paused .ring { animation-play-state: paused; }
+
+.cabin, .technique { overflow: visible; }

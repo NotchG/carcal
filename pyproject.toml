@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "carcal"
+version = "0.4.0"
+description = "Automated car audio calibration: REW -> Rainbow EL-PA4.6 DSP presets"
+requires-python = ">=3.11"
+dependencies = ["numpy", "scipy"]
+
+[project.optional-dependencies]
+# The DSP bridge (Windows laptop next to the DSP). On Windows also install [gui].
+bridge = ["fastapi>=0.110", "uvicorn>=0.29", "pillow"]
+# Driving the Rainbow app's dialogs on Windows
+gui = ["pywinauto>=0.6.8", "opencv-python", "pillow"]
+# Optional MCP server for the Rainbow app
+mcp = ["mcp", "pywinauto>=0.6.8", "opencv-python", "pillow"]
+dev = ["pytest", "httpx", "opencv-python-headless", "pillow", "mcp",
+       "fastapi>=0.110", "uvicorn>=0.29", "python-multipart"]
+
+[project.scripts]
+carcal = "carcal.cli:main"
+carcal-dsp-mcp = "carcal.dspgui.server:main"
+carcal-bridge = "carcal.bridge.__main__:main"
+
+[tool.setuptools.packages.find]
+include = ["carcal*"]
+
+[tool.setuptools.package-data]
+"carcal.dspgui" = ["templates/*.png"]
+"carcal.devices" = ["*.dspSingle"]
